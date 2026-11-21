@@ -297,3 +297,32 @@ func TestRegressionAnOutboxTooLargeForOneRequestIsSentInPieces(t *testing.T) {
 		t.Errorf("%d changes still queued after a full sync", len(left))
 	}
 }
+
+func TestRegressionSavingAnUnchangedVoiceQueuesNothing(t *testing.T) {
+	h := &home{stored: map[string]Profile{}}
+	s := synced(t, h)
+	if err := s.Save(ann()); err != nil {
+		t.Fatal(err)
+	}
+	s.syncs.Wait()
+	if err := s.Sync(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	h.mu.Lock()
+	before := len(h.sent)
+	h.mu.Unlock()
+
+	if err := s.Save(ann()); err != nil {
+		t.Fatal(err)
+	}
+	s.syncs.Wait()
+
+	if got := s.waiting(); len(got) != 0 {
+		t.Errorf("an unchanged save queued %d changes", len(got))
+	}
+	h.mu.Lock()
+	defer h.mu.Unlock()
+	if len(h.sent) != before {
+		t.Errorf("an unchanged save was sent to Home Assistant")
+	}
+}
