@@ -99,9 +99,7 @@ type Service struct {
 	asked    map[time.Time]Told
 	outbox   []change
 	wake     func() string
-
-	// queued numbers the changes that join the outbox.
-	queued uint64
+	queued   uint64
 
 	syncing sync.Mutex
 	syncs   sync.WaitGroup
@@ -163,6 +161,13 @@ func (s *Service) Entities() []esphome.Entity { return []esphome.Entity{s.speake
 
 func (s *Service) Actions() []*esphome.Action {
 	return append(s.enrolActions(), &esphome.Action{
+		Name:        "voice_sync",
+		Description: "Fetch the household's voice profiles from Home Assistant.",
+		Run: func(esphome.Call) (any, error) {
+			s.Resync()
+			return nil, nil
+		},
+	}, &esphome.Action{
 		Name:        "voice_profiles",
 		Description: "Replace the voice profiles this device matches speakers against.",
 		Answers:     true,
