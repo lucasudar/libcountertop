@@ -45,6 +45,10 @@ type Options struct {
 
 func EngineArgs() []string {
 	return []string{
+		"--enable-logging=stderr",
+		"--log-level=0",
+		"--v=0",
+		"--vmodule=*/media/*=1,*/cdm/*=2,*/eme/*=1",
 		"--autoplay-policy=no-user-gesture-required",
 		"--allow-running-insecure-content",
 		"--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessSendPreflights",
