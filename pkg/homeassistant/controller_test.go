@@ -3,11 +3,13 @@ package homeassistant
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
+	esphome "github.com/ygelfand/go-esphome-device"
 	"github.com/ygelfand/go-esphome-device/api"
 	"google.golang.org/protobuf/proto"
 
@@ -19,11 +21,15 @@ type fake struct {
 	mu     sync.Mutex
 	answer func(*api.HomeassistantActionRequest) *api.HomeassistantActionResponse
 	fail   error
+	frame  int
 }
 
 func (f *fake) Send(m proto.Message) error {
 	if f.fail != nil {
 		return f.fail
+	}
+	if f.frame > 0 && proto.Size(m) > f.frame {
+		return fmt.Errorf("%w: %d bytes", esphome.ErrFrameTooLarge, proto.Size(m))
 	}
 	req := m.(*api.HomeassistantActionRequest)
 	f.mu.Lock()
@@ -207,6 +213,40 @@ func TestSendFailureDisconnects(t *testing.T) {
 	}
 	if heard != Unknown {
 		t.Errorf("heard %s after the hold, want unknown", heard)
+	}
+}
+
+var tooLarge = map[string]string{"changes": strings.Repeat("x", 2_000)}
+
+func TestRegressionARequestTooLargeToSendKeepsTheLink(t *testing.T) {
+	h, f := connected(answering(`{"response":"ok"}`))
+	f.frame = 1_000
+	set(h, f, Allowed)
+
+	err := h.Call(context.Background(), "echolocal.voices", tooLarge)
+
+	if !errors.Is(err, esphome.ErrFrameTooLarge) {
+		t.Fatalf("an oversized request said %v, want ErrFrameTooLarge", err)
+	}
+	if err := h.Call(context.Background(), "light.turn_on", nil); err != nil {
+		t.Errorf("the next call said %v, want the link kept", err)
+	}
+}
+
+func TestRegressionAnEventTooLargeToSendKeepsTheLink(t *testing.T) {
+	h, f := connected(answering(`{"response":"ok"}`))
+	f.frame = 1_000
+	set(h, f, Allowed)
+	event := request("esphome.countertop_actions", tooLarge, nil, "")
+	event.IsEvent = true
+
+	_, err := h.Relay(context.Background(), event)
+
+	if !errors.Is(err, esphome.ErrFrameTooLarge) {
+		t.Fatalf("an oversized event said %v, want ErrFrameTooLarge", err)
+	}
+	if err := h.Call(context.Background(), "light.turn_on", nil); err != nil {
+		t.Errorf("the next call said %v, want the link kept", err)
 	}
 }
 

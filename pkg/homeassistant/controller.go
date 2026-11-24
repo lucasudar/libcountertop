@@ -513,12 +513,30 @@ func (h *Controller) Relay(
 	if err != nil {
 		return nil, err
 	}
+	if refused, err := h.deliver(targets, req); len(refused) == len(targets) {
+		return nil, err
+	}
+	return nil, nil
+}
+
+func (h *Controller) deliver(
+	targets []sender,
+	req *api.HomeassistantActionRequest,
+) (refused []sender, err error) {
 	for _, t := range targets {
-		if err := t.Send(req); err != nil {
+		sent := t.Send(req)
+		switch {
+		case sent == nil:
+		case errors.Is(sent, esphome.ErrFrameTooLarge):
+			refused = append(refused, t)
+			err = fmt.Errorf("homeassistant: %s: %w", req.GetService(), sent)
+		default:
+			slog.Warn("Home Assistant link dropped, sending to it failed",
+				"action", req.GetService(), "err", sent)
 			h.lost(t)
 		}
 	}
-	return nil, nil
+	return refused, err
 }
 
 func (h *Controller) targets() ([]sender, error) {
@@ -562,9 +580,15 @@ func (h *Controller) send(
 	}()
 
 	req.CallId = id
-	for _, t := range targets {
-		if err := t.Send(req); err != nil {
-			h.lost(t)
+	if refused, err := h.deliver(targets, req); len(refused) > 0 {
+		h.mu.Lock()
+		for _, t := range refused {
+			delete(p.to, t)
+		}
+		none := len(p.to) == 0
+		h.mu.Unlock()
+		if none {
+			return nil, err
 		}
 	}
 
