@@ -20,6 +20,7 @@
 #include <media/NdkMediaFormat.h>
 
 #include "cam2.h"
+#include "denylist.h"
 #include "protocol.h"
 #include "turn.h"
 #if __ANDROID_API__ < 26
@@ -705,6 +706,7 @@ static int listener(void) {
 
 int main(void) {
 	signal(SIGPIPE, SIG_IGN);
+	denylist_start();
 	int lsock = listener();
 	if (lsock < 0 || listen(lsock, 2) < 0) {
 		logw("socket %s: %s", SOCKET_PATH, strerror(errno));
