@@ -73,6 +73,8 @@ var Shared = Coverage{
 		"Screen.Language":           "screen.language",
 		"Screen.Marks":              "screen.marks",
 		"Screen.Touches":            "screen.touches",
+		"Screen.Volume":             "screen.volume",
+		"Update.Channel":            "update.channel",
 		"Screen.Hours":              "clock.hours",
 		"Clock.Face":                "clock.face",
 		"Clock.Position":            "clock.position",
@@ -153,6 +155,8 @@ var Shared = Coverage{
 		"HomeAlarm.Settled.Show":    "homealarm.settled.show",
 		"HomeAlarm.Settled.Sound":   "homealarm.settled.sound",
 		"HomeAlarm.SettledFor":      "homealarm.settled.for",
+		"HomeAlarm.Hide":            "homealarm.hidden",
+		"Thermostat.Entities":       "thermostat.entities",
 		"Thermostat.Look":           "thermostat.look",
 		"Thermostat.Tab":            "thermostat.tab",
 		"Lovelace.User":             "lovelace.user",
@@ -229,10 +233,8 @@ var Shared = Coverage{
 		"Wake.ArbitrationOffset":    "assistants.arbitration_offset",
 	},
 	ByHand: map[string]string{
-		"HomeAlarm.Hide":      "the home alarm's zone list page, one toggle per discovered zone",
-		"Thermostat.Entities": "the thermostat page's climate list, one toggle per entity, up to four",
-		"Wake.Words":          "Home Assistant's, by slot, through the satellite",
-		"Poster.Last":         "the picture last shown, written by the poster itself",
+		"Wake.Words":  "Home Assistant's, by slot, through the satellite",
+		"Poster.Last": "the picture last shown, written by the poster itself",
 
 		"Lock.Failures": "wrong PINs counted by the lock screen",
 		"Lock.Until":    "the lockout the lock screen sets after too many wrong PINs",
@@ -251,14 +253,12 @@ var Shared = Coverage{
 		"Cameras.Pick.Areas":    "the cameras app's entity picker",
 		"Cameras.Pick.Entities": "the cameras app's entity picker",
 
-		"Update.Channel":     "Home Assistant's update channel select",
 		"Update.LastVersion": "the version last announced to Home Assistant, written by the firmware feature itself",
 
 		"Network.Address": "read back from the lease, not chosen",
 
-		"Screen.Volume": "not wired yet",
-		"Time.Home":     "not wired yet",
-		"Time.Chosen":   "not wired yet",
+		"Time.Home":   "not wired yet",
+		"Time.Chosen": "not wired yet",
 
 		"YouTubeAccounts.Device":   "the YouTube app's sign-in device id, made at the first sign-in",
 		"YouTubeAccounts.Chosen":   "the YouTube app's account picker",

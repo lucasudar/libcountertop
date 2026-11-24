@@ -99,6 +99,10 @@ assistants.setting.buffer: Bộ đệm phản hồi
 assistants.setting.delivery: Phát phản hồi
 assistants.setting.follow_up: Thời gian chờ nói tiếp
 assistants.setting.known_voices: Chỉ giọng nói đã nhận diện
+assistants.setting.look.listening: Hiệu ứng khi nghe
+assistants.setting.look.place: Vị trí hiệu ứng
+assistants.setting.look.responding: Hiệu ứng khi phản hồi
+assistants.setting.look.waiting: Hiệu ứng khi chờ
 assistants.setting.max_listen: Thời gian nghe tối đa
 assistants.setting.max_think: Thời gian suy nghĩ tối đa
 assistants.setting.recordings: Số bản ghi giữ lại
@@ -773,6 +777,7 @@ onboard.title: Thêm tôi vào Home Assistant
 homealarm.app: Báo động nhà
 homealarm.group.homealarm: Báo động nhà
 homealarm.setting.entity: Bảng báo động
+homealarm.setting.hidden: Khu vực ẩn
 homealarm.setting.look: Kiểu hiển thị
 homealarm.entity.look: Kiểu báo động nhà
 homealarm.setting.tab: Tab bảng điều khiển
@@ -1393,6 +1398,7 @@ touches.dots: Chấm
 touches.details: Chi tiết
 screen.setting.theme: Giao diện
 screen.setting.timer: Kiểu hẹn giờ
+screen.setting.volume: Vị trí bảng âm lượng
 screen.setting.custom.background: Nền giao diện tùy chỉnh
 screen.setting.custom.surface: Thẻ giao diện tùy chỉnh
 screen.setting.custom.text: Chữ giao diện tùy chỉnh
@@ -1701,9 +1707,11 @@ update.channel.stable: Ổn định
 update.check: Kiểm tra cập nhật
 update.checking: Đang kiểm tra…
 update.current: Đã cập nhật
+update.group.updates: Cập nhật
 update.install: Tải và cài đặt {{.Version}}
 update.ready: Có bản cập nhật
 update.running: Phiên bản hiện tại
+update.setting.channel: Kênh cập nhật
 update.title: Cập nhật phần mềm
 update.unreachable: Không thể kết nối máy chủ cập nhật
 update.versions: Phiên bản khác

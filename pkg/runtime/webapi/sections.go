@@ -27,7 +27,7 @@ var sections = []section{
 	{"settings.camera", []string{"camera"}},
 	{"voice.title", []string{"voice"}},
 	{"settings.assistants", []string{"assistants", "ring"}},
-	{systemSection, []string{"diag"}},
+	{systemSection, []string{"diag", "update"}},
 }
 
 const systemSection = "settings.system"

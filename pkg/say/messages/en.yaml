@@ -98,6 +98,10 @@ assistants.setting.buffer: Reply buffer
 assistants.setting.delivery: Response playback
 assistants.setting.follow_up: Follow-up time
 assistants.setting.known_voices: Recognized voices only
+assistants.setting.look.listening: Listening visual
+assistants.setting.look.place: Visual placement
+assistants.setting.look.responding: Responding visual
+assistants.setting.look.waiting: Waiting visual
 assistants.setting.max_listen: Max listening time
 assistants.setting.max_think: Max thinking time
 assistants.setting.recordings: Recordings kept
@@ -773,6 +777,7 @@ onboard.title: Add me to Home Assistant
 homealarm.app: Home alarm
 homealarm.group.homealarm: Home alarm
 homealarm.setting.entity: Alarm panel
+homealarm.setting.hidden: Hidden zones
 homealarm.setting.look: Look
 homealarm.entity.look: Home alarm look
 homealarm.setting.tab: Dashboard tab
@@ -1393,6 +1398,7 @@ touches.dots: Dots
 touches.details: Details
 screen.setting.theme: Theme
 screen.setting.timer: Timer style
+screen.setting.volume: Volume panel position
 screen.setting.custom.background: Custom theme background
 screen.setting.custom.surface: Custom theme cards
 screen.setting.custom.text: Custom theme text
@@ -1701,9 +1707,11 @@ update.channel.stable: Stable
 update.check: Check for updates
 update.checking: Checking…
 update.current: Up to date
+update.group.updates: Updates
 update.install: "Download and install {{.Version}}"
 update.ready: Update available
 update.running: Current version
+update.setting.channel: Update channel
 update.title: Software update
 update.unreachable: Couldn't reach the update server
 update.versions: Other versions

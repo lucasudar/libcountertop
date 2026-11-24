@@ -99,6 +99,10 @@ assistants.setting.buffer: Buffer risposta
 assistants.setting.delivery: Riproduzione risposta
 assistants.setting.follow_up: Tempo per proseguire
 assistants.setting.known_voices: Solo voci riconosciute
+assistants.setting.look.listening: Grafica in ascolto
+assistants.setting.look.place: Posizione grafica
+assistants.setting.look.responding: Grafica in risposta
+assistants.setting.look.waiting: Grafica in attesa
 assistants.setting.max_listen: Ascolto massimo
 assistants.setting.max_think: Elaborazione massima
 assistants.setting.recordings: Registrazioni conservate
@@ -773,6 +777,7 @@ onboard.title: Aggiungimi a Home Assistant
 homealarm.app: Allarme casa
 homealarm.group.homealarm: Allarme casa
 homealarm.setting.entity: Centrale allarme
+homealarm.setting.hidden: Zone nascoste
 homealarm.setting.look: Aspetto
 homealarm.entity.look: Aspetto allarme casa
 homealarm.setting.tab: Scheda dashboard
@@ -1393,6 +1398,7 @@ touches.dots: Punti
 touches.details: Dettagli
 screen.setting.theme: Tema
 screen.setting.timer: Stile timer
+screen.setting.volume: Posizione pannello volume
 screen.setting.custom.background: Sfondo tema personalizzato
 screen.setting.custom.surface: Schede tema personalizzato
 screen.setting.custom.text: Testo tema personalizzato
@@ -1701,9 +1707,11 @@ update.channel.stable: Stabile
 update.check: Cerca aggiornamenti
 update.checking: Verifica…
 update.current: Aggiornato
+update.group.updates: Aggiornamenti
 update.install: "Scarica e installa {{.Version}}"
 update.ready: Aggiornamento disponibile
 update.running: Versione attuale
+update.setting.channel: Canale aggiornamenti
 update.title: Aggiornamento software
 update.unreachable: Impossibile raggiungere il server degli aggiornamenti
 update.versions: Altre versioni
