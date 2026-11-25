@@ -90,6 +90,36 @@ actions:
       bare: riattacca
       call: (chiudi|termina) [la] (chiamata|telefonata)
       end: (rifiuta|ignora) [la] chiamata
+  recipes:
+    _: Cucinare dalle ricette
+    amount: Ti serve {{.Amount}}
+    closed: Nessuna ricetta aperta in cucina
+    cooking: Cuciniamo {{.Recipe}}.
+    first: Questo è il primo passaggio
+    found: Ecco le ricette per {{.Query}}
+    last: Era l'ultimo passaggio
+    missing: '{{.Ingredient}} non è in questa ricetta'
+    none: Nessuna ricetta corrisponde a {{.Query}}
+    nosteps: Questa ricetta non ha passaggi
+    notimer: Questo passaggio non ha un timer
+    sentence:
+      amount: quanto {ingredient} [mi] serve
+      amount_many: quanti {ingredient} [mi] servono
+      cook: (iniziamo a cucinare|cuciniamo|voglio cucinare|prepariamo) {recipe}
+      find: (trova|cerca) (una ricetta|ricette) (per|con) {recipe}
+      find_named: (trova|cerca) [la] ricetta [del|della|dei|delle] {recipe}
+      next: prossimo passaggio
+      next_what: qual è il prossimo passaggio
+      previous: passaggio precedente
+      repeat: (ripeti|leggi) [il] passaggio
+      show: mostrami [la] ricetta (per|di|del|della) {recipe}
+      timer: avvia [il] timer del passaggio
+    showing: Ecco {{.Recipe}}
+    step: 'Passaggio {{.N}} di {{.Of}}: {{.Text}}'
+    timer: Timer avviato per {{.Minutes}} minut{{if eq .Minutes 1}}o{{else}}i{{end}}
+    unreachable: Non riesco a raggiungere Mealie
+    unset: Configura prima Mealie nell'app Ricette
+    which: Quale ricetta?
   youtube_tv:
     _: Guarda YouTube TV
     airing: Su {{.Channel}} c'è {{.Title}}
@@ -1626,6 +1656,16 @@ lovelace:
   unreachable:
     _: Home Assistant non è raggiungibile
     retry: Nuovo tentativo automatico · tocca per riprovare ora
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Server Mealie
+      help: Indirizzo del server Mealie letto dall'app Ricette; senza schema si assume http
+    token:
+      _: Token API di Mealie
+      help: Token API creato in Mealie nel tuo profilo, sotto API Tokens; ricette e preferiti si leggono come quell'utente
 media:
   entity:
     buttons: Pulsanti volume
@@ -2019,6 +2059,40 @@ radio:
 rail:
   media: Media
   sleep: Riposo
+recipes:
+  all: Tutte
+  app: Ricette
+  back: Indietro
+  cook: Inizia a cucinare
+  done: Fatto
+  favorites: Preferite
+  hours: '{{.N}} h'
+  hours_minutes: '{{.H}} h {{.M}} min'
+  ingredients: Ingredienti
+  listening: Di’ “next step”
+  minutes: '{{.N}} min'
+  more: Mostra altre
+  need: Per questo passaggio
+  next: Avanti
+  nofavorites: Ancora nessuna ricetta preferita
+  none: Nessuna ricetta trovata
+  page: Ricette
+  prep: Preparazione {{.Time}}
+  search: Cerca ricette
+  servings: '{{.N}} porzioni'
+  setup:
+    _: Collega Mealie
+    hint: Inserisci il server Mealie e il token API
+  status:
+    _: Stato
+    connecting: Connessione…
+    ready: Connesso
+    token: Mealie ha rifiutato il token API
+    unreachable: Mealie non raggiungibile
+    unset: Non configurato
+  step: Passaggio {{.N}} di {{.Of}}
+  steps: Passaggi
+  timer: Avvia timer di {{.Time}}
 reply:
   download: Parte dopo, senza interruzioni
   stream: Parte prima, può interrompersi
@@ -2776,6 +2850,9 @@ voice:
       call_hangup:
         _: Chiudi una chiamata
         help: Consente alle frasi di Home Assistant Assist come "riaggancia" di chiudere o rifiutare una chiamata
+      recipes:
+        _: Cucinare dalle ricette
+        help: Permette alle frasi di Home Assistant Assist di trovare ricette, iniziare a cucinare e scorrere i passaggi su questo dispositivo
       youtube_tv:
         _: Guarda YouTube TV
         help: Consente alle frasi di Home Assistant Assist di mettere un canale YouTube TV o dire cosa c'è in onda
@@ -2783,6 +2860,9 @@ voice:
       _: Tutte le azioni
       help: Offre a Home Assistant Assist le frasi di questo dispositivo; spento le ritira tutte
     command:
+      cook:
+        _: Modalità cucina
+        help: Con la modalità cucina aperta, dire "next step", "previous step" o "start timer" (in inglese) scorre la ricetta
       mirror:
         _: Specchio
         help: Dire "mirror" apre la vista specchio della fotocamera

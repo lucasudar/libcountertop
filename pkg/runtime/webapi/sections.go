@@ -15,7 +15,7 @@ var sections = []section{
 	{"settings.network", []string{"network", "certs", "access"}},
 	{"settings.features", []string{
 		"cast", "youtube", "media", "bluetooth", "rtsp", "call",
-		"calendar", "todo", "tv",
+		"calendar", "todo", "tv", "mealie",
 	}},
 	{"settings.display", []string{
 		"screen", "clock", "idle", "visual", "poster", "photos", "weather", "apps", "cameras",

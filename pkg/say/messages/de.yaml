@@ -90,6 +90,36 @@ actions:
       bare: auflegen
       call: (beende den Anruf|leg den Anruf auf)
       end: (lehne|weise) [den] Anruf ab
+  recipes:
+    _: Nach Rezept kochen
+    amount: Du brauchst {{.Amount}}
+    closed: Kein Rezept zum Kochen geöffnet
+    cooking: Lass uns {{.Recipe}} kochen.
+    first: Das ist der erste Schritt
+    found: Hier sind Rezepte für {{.Query}}
+    last: Das war der letzte Schritt
+    missing: '{{.Ingredient}} kommt in diesem Rezept nicht vor'
+    none: Keine Rezepte passen zu {{.Query}}
+    nosteps: Dieses Rezept hat keine Schritte
+    notimer: Dieser Schritt hat keinen Timer
+    sentence:
+      amount: wie viel {ingredient} [brauche ich]
+      amount_many: wie viele {ingredient} [brauche ich]
+      cook: (lass uns {recipe} kochen|ich möchte {recipe} kochen|koche {recipe})
+      find: (finde|suche) [ein|eine] Rezept[e] (für|mit) {recipe}
+      find_named: (finde|suche) [mir] [ein] {recipe} Rezept
+      next: nächster Schritt
+      next_what: was ist der nächste Schritt
+      previous: (vorheriger|letzter) Schritt
+      repeat: (wiederhole|lies) [den] Schritt [nochmal]
+      show: zeig [mir] [das] Rezept für {recipe}
+      timer: starte [den] Timer für den Schritt
+    showing: Hier ist {{.Recipe}}
+    step: 'Schritt {{.N}} von {{.Of}}: {{.Text}}'
+    timer: Timer für {{.Minutes}} Minute{{if ne .Minutes 1}}n{{end}} gestartet
+    unreachable: Ich konnte Mealie nicht erreichen
+    unset: Richte zuerst Mealie in der Rezepte-App ein
+    which: Welches Rezept?
   youtube_tv:
     _: YouTube TV schauen
     airing: Auf {{.Channel}} läuft {{.Title}}
@@ -1626,6 +1656,16 @@ lovelace:
   unreachable:
     _: Home Assistant ist nicht erreichbar
     retry: Neuer Versuch erfolgt automatisch · tippen, um es jetzt zu versuchen
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Mealie-Server
+      help: Adresse des Mealie-Servers, den die Rezepte-App liest; ohne Schema wird http angenommen
+    token:
+      _: Mealie-API-Token
+      help: API-Token, in Mealie im Profil unter API Tokens erstellt; Rezepte und Favoriten werden als dieser Benutzer gelesen
 media:
   entity:
     buttons: Lautstärketasten
@@ -2017,6 +2057,40 @@ radio:
 rail:
   media: Medien
   sleep: Ruhe
+recipes:
+  all: Alle
+  app: Rezepte
+  back: Zurück
+  cook: Kochen starten
+  done: Fertig
+  favorites: Favoriten
+  hours: '{{.N}} Std.'
+  hours_minutes: '{{.H}} Std. {{.M}} Min.'
+  ingredients: Zutaten
+  listening: Sag „next step“
+  minutes: '{{.N}} Min.'
+  more: Mehr anzeigen
+  need: Für diesen Schritt
+  next: Weiter
+  nofavorites: Noch keine Lieblingsrezepte
+  none: Keine Rezepte gefunden
+  page: Rezepte
+  prep: Vorbereitung {{.Time}}
+  search: Rezepte suchen
+  servings: '{{.N}} Portionen'
+  setup:
+    _: Mealie verbinden
+    hint: Gib deinen Mealie-Server und dein API-Token ein
+  status:
+    _: Status
+    connecting: Verbindet…
+    ready: Verbunden
+    token: Mealie hat das API-Token abgelehnt
+    unreachable: Mealie nicht erreichbar
+    unset: Nicht eingerichtet
+  step: Schritt {{.N}} von {{.Of}}
+  steps: Schritte
+  timer: Timer für {{.Time}} starten
 reply:
   download: Startet später, ohne Lücken
   stream: Startet früher, kann Lücken haben
@@ -2772,6 +2846,9 @@ voice:
       call_hangup:
         _: Anruf beenden
         help: Lässt Sätze von Home Assistant Assist wie „auflegen“ einen Anruf beenden oder ablehnen
+      recipes:
+        _: Nach Rezept kochen
+        help: Lässt Sätze von Home Assistant Assist Rezepte finden, das Kochen starten und auf diesem Gerät durch die Schritte gehen
       youtube_tv:
         _: YouTube TV schauen
         help: Lässt Sätze von Home Assistant Assist einen YouTube-TV-Sender einschalten oder sagen, was läuft
@@ -2779,6 +2856,9 @@ voice:
       _: Alle Aktionen
       help: Bietet die gesprochenen Sätze dieses Geräts Home Assistant Assist an; aus zieht sie alle zurück
     command:
+      cook:
+        _: Kochmodus
+        help: Bei offenem Kochmodus geht „next step“, „previous step“ oder „start timer“ (auf Englisch) durch das Rezept
       mirror:
         _: Spiegel
         help: „Spiegel“ öffnet die Spiegelansicht der Kamera

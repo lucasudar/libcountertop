@@ -90,6 +90,36 @@ actions:
       bare: hang up
       call: hang up [the] (call|phone)
       end: (end|decline|reject) [the] call
+  recipes:
+    _: Cook from recipes
+    amount: You need {{.Amount}}
+    closed: No recipe is open for cooking
+    cooking: Let's cook {{.Recipe}}.
+    first: This is the first step
+    found: Here are recipes for {{.Query}}
+    last: That was the last step
+    missing: '{{.Ingredient}} isn''t in this recipe'
+    none: No recipes match {{.Query}}
+    nosteps: This recipe has no steps
+    notimer: This step has no timer
+    sentence:
+      amount: how much {ingredient} [do i need]
+      amount_many: how many {ingredient} [do i need]
+      cook: (start cooking|let's cook|let's make|i want to cook) {recipe}
+      find: (find|search for|look up) [some] recipe[s] (for|with) {recipe}
+      find_named: find [me] [a] {recipe} recipe[s]
+      next: next step
+      next_what: what's [the] next step
+      previous: (previous|last) step
+      repeat: (repeat|read) [the] [current] step
+      show: show [me] [the] recipe for {recipe}
+      timer: start [the] step timer
+    showing: Here's {{.Recipe}}
+    step: 'Step {{.N}} of {{.Of}}: {{.Text}}'
+    timer: Timer started for {{.Minutes}} minute{{if ne .Minutes 1}}s{{end}}
+    unreachable: I couldn't reach Mealie
+    unset: Set up Mealie in the Recipes app first
+    which: Which recipe?
   youtube_tv:
     _: Watch YouTube TV
     airing: '{{.Channel}} is showing {{.Title}}'
@@ -1632,6 +1662,16 @@ lovelace:
   unreachable:
     _: Home Assistant isn't reachable
     retry: Trying again automatically · tap to try now
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Mealie server
+      help: Address of the Mealie server the Recipes app reads; http is assumed when no scheme is given
+    token:
+      _: Mealie API token
+      help: API token created in Mealie under your profile's API Tokens; recipes and favorites are read as that user
 media:
   entity:
     buttons: Volume buttons
@@ -2031,6 +2071,40 @@ radio:
 rail:
   media: Media
   sleep: Sleep
+recipes:
+  all: All
+  app: Recipes
+  back: Back
+  cook: Start cooking
+  done: Done
+  favorites: Favorites
+  hours: '{{.N}} hr'
+  hours_minutes: '{{.H}} hr {{.M}} min'
+  ingredients: Ingredients
+  listening: Say “next step”
+  minutes: '{{.N}} min'
+  more: Show more
+  need: For this step
+  next: Next
+  nofavorites: No favorite recipes yet
+  none: No recipes found
+  page: Recipes
+  prep: Prep {{.Time}}
+  search: Search recipes
+  servings: '{{.N}} servings'
+  setup:
+    _: Connect Mealie
+    hint: Enter your Mealie server and API token
+  status:
+    _: Status
+    connecting: Connecting…
+    ready: Connected
+    token: Mealie refused the API token
+    unreachable: Can't reach Mealie
+    unset: Not set up
+  step: Step {{.N}} of {{.Of}}
+  steps: Steps
+  timer: Start {{.Time}} timer
 reply:
   download: Starts later, never gaps
   stream: Starts sooner, can gap
@@ -2790,6 +2864,9 @@ voice:
       call_hangup:
         _: Hang up a call
         help: Lets Home Assistant Assist sentences like "hang up" end or decline a call
+      recipes:
+        _: Cook from recipes
+        help: Lets Home Assistant Assist sentences find recipes, start cooking, and step through the recipe on this device
       youtube_tv:
         _: Watch YouTube TV
         help: Lets Home Assistant Assist sentences put on a YouTube TV channel or say what's on
@@ -2797,6 +2874,9 @@ voice:
       _: All actions
       help: Offers this device's spoken sentences to Home Assistant Assist; off withdraws all of them
     command:
+      cook:
+        _: Cook mode
+        help: While cook mode is open, saying "next step", "previous step" or "start timer" moves through the recipe
       mirror:
         _: Mirror
         help: Saying "mirror" opens the camera mirror view

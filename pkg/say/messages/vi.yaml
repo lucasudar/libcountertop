@@ -90,6 +90,36 @@ actions:
       bare: cúp máy
       call: (cúp|tắt) [cuộc] (gọi|điện thoại)
       end: (kết thúc|từ chối) cuộc gọi
+  recipes:
+    _: Nấu theo công thức
+    amount: Bạn cần {{.Amount}}
+    closed: Chưa mở công thức nào để nấu
+    cooking: Cùng nấu {{.Recipe}} nhé.
+    first: Đây là bước đầu tiên
+    found: Đây là các công thức cho {{.Query}}
+    last: Đó là bước cuối cùng
+    missing: Công thức này không có {{.Ingredient}}
+    none: Không có công thức nào khớp với {{.Query}}
+    nosteps: Công thức này không có bước nào
+    notimer: Bước này không có hẹn giờ
+    sentence:
+      amount: cần bao nhiêu {ingredient}
+      amount_many: cần mấy {ingredient}
+      cook: (bắt đầu nấu|nấu món|mình nấu) {recipe}
+      find: tìm công thức [nấu] {recipe}
+      find_named: tìm [cho tôi] món {recipe}
+      next: bước tiếp theo
+      next_what: bước tiếp theo là gì
+      previous: bước (trước|trước đó)
+      repeat: (nhắc lại|đọc lại) bước [này]
+      show: cho (tôi|mình) xem công thức [món] {recipe}
+      timer: (bắt đầu|bật) hẹn giờ [cho] bước [này]
+    showing: Đây là {{.Recipe}}
+    step: 'Bước {{.N}} trên {{.Of}}: {{.Text}}'
+    timer: Đã hẹn giờ {{.Minutes}} phút
+    unreachable: Tôi không kết nối được Mealie
+    unset: Hãy thiết lập Mealie trong ứng dụng Công thức trước
+    which: Công thức nào?
   youtube_tv:
     _: Xem YouTube TV
     airing: '{{.Channel}} đang chiếu {{.Title}}'
@@ -1626,6 +1656,16 @@ lovelace:
   unreachable:
     _: Không thể kết nối Home Assistant
     retry: Tự động thử lại · chạm để thử ngay
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Máy chủ Mealie
+      help: Địa chỉ máy chủ Mealie mà ứng dụng Công thức đọc; không ghi giao thức thì dùng http
+    token:
+      _: Mã API Mealie
+      help: Mã API tạo trong Mealie ở hồ sơ, mục API Tokens; công thức và mục yêu thích được đọc theo người dùng đó
 media:
   entity:
     buttons: Nút âm lượng
@@ -2019,6 +2059,40 @@ radio:
 rail:
   media: Media
   sleep: Ngủ
+recipes:
+  all: Tất cả
+  app: Công thức
+  back: Quay lại
+  cook: Bắt đầu nấu
+  done: Xong
+  favorites: Yêu thích
+  hours: '{{.N}} giờ'
+  hours_minutes: '{{.H}} giờ {{.M}} phút'
+  ingredients: Nguyên liệu
+  listening: Nói “next step”
+  minutes: '{{.N}} phút'
+  more: Xem thêm
+  need: Cho bước này
+  next: Tiếp
+  nofavorites: Chưa có công thức yêu thích
+  none: Không tìm thấy công thức
+  page: Công thức
+  prep: Chuẩn bị {{.Time}}
+  search: Tìm công thức
+  servings: '{{.N}} khẩu phần'
+  setup:
+    _: Kết nối Mealie
+    hint: Nhập máy chủ Mealie và mã API
+  status:
+    _: Trạng thái
+    connecting: Đang kết nối…
+    ready: Đã kết nối
+    token: Mealie từ chối mã API
+    unreachable: Không kết nối được Mealie
+    unset: Chưa thiết lập
+  step: Bước {{.N}}/{{.Of}}
+  steps: Các bước
+  timer: Hẹn giờ {{.Time}}
 reply:
   download: Bắt đầu muộn hơn, không bị ngắt
   stream: Bắt đầu sớm hơn, có thể bị ngắt
@@ -2775,6 +2849,9 @@ voice:
       call_hangup:
         _: Gác máy
         help: Cho phép câu lệnh Home Assistant Assist như "hang up" kết thúc hoặc từ chối cuộc gọi
+      recipes:
+        _: Nấu theo công thức
+        help: Cho phép các câu của Home Assistant Assist tìm công thức, bắt đầu nấu và chuyển qua các bước trên thiết bị này
       youtube_tv:
         _: Xem YouTube TV
         help: Cho phép câu lệnh Home Assistant Assist mở kênh YouTube TV hoặc cho biết đang chiếu gì
@@ -2782,6 +2859,9 @@ voice:
       _: Tất cả hành động
       help: Cung cấp các câu lệnh của thiết bị này cho Home Assistant Assist; tắt sẽ rút lại tất cả
     command:
+      cook:
+        _: Chế độ nấu
+        help: Khi chế độ nấu đang mở, nói "next step", "previous step" hoặc "start timer" (tiếng Anh) để chuyển qua công thức
       mirror:
         _: Gương
         help: Nói "mirror" để mở chế độ gương của camera

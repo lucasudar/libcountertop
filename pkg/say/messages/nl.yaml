@@ -90,6 +90,36 @@ actions:
       bare: ophangen
       call: (hang [de] (oproep|telefoon) op|beëindig [de] oproep)
       end: (weiger|negeer) [de] oproep
+  recipes:
+    _: Koken met recepten
+    amount: Je hebt {{.Amount}} nodig
+    closed: Er is geen recept open om te koken
+    cooking: Laten we {{.Recipe}} koken.
+    first: Dit is de eerste stap
+    found: Hier zijn recepten voor {{.Query}}
+    last: Dat was de laatste stap
+    missing: '{{.Ingredient}} zit niet in dit recept'
+    none: Geen recepten gevonden voor {{.Query}}
+    nosteps: Dit recept heeft geen stappen
+    notimer: Deze stap heeft geen timer
+    sentence:
+      amount: hoeveel {ingredient} [heb ik nodig]
+      amount_many: hoe veel {ingredient} [heb ik nodig]
+      cook: (laten we {recipe} koken|ik wil {recipe} koken|kook {recipe})
+      find: (zoek|vind) [een] recept[en] (voor|met) {recipe}
+      find_named: (zoek|vind) [een] {recipe} recept
+      next: volgende stap
+      next_what: wat is de volgende stap
+      previous: vorige stap
+      repeat: (herhaal|lees) [de] stap [nog eens]
+      show: laat [me] [het] recept (voor|van) {recipe} zien
+      timer: start [de] timer [voor] [deze] stap
+    showing: Hier is {{.Recipe}}
+    step: 'Stap {{.N}} van {{.Of}}: {{.Text}}'
+    timer: Timer gestart voor {{.Minutes}} minu{{if eq .Minutes 1}}ut{{else}}ten{{end}}
+    unreachable: Ik kon Mealie niet bereiken
+    unset: Stel eerst Mealie in via de Recepten-app
+    which: Welk recept?
   youtube_tv:
     _: YouTube TV kijken
     airing: Op {{.Channel}} is {{.Title}}
@@ -1626,6 +1656,16 @@ lovelace:
   unreachable:
     _: Home Assistant is niet bereikbaar
     retry: Automatisch opnieuw proberen · tik om het nu te proberen
+mealie:
+  group:
+    mealie: Mealie
+  setting:
+    server:
+      _: Mealie-server
+      help: Adres van de Mealie-server die de Recepten-app leest; zonder schema wordt http aangenomen
+    token:
+      _: Mealie-API-token
+      help: API-token aangemaakt in Mealie bij je profiel onder API Tokens; recepten en favorieten worden als die gebruiker gelezen
 media:
   entity:
     buttons: Volumeknoppen
@@ -2017,6 +2057,40 @@ radio:
 rail:
   media: Media
   sleep: Slapen
+recipes:
+  all: Alle
+  app: Recepten
+  back: Terug
+  cook: Begin met koken
+  done: Klaar
+  favorites: Favorieten
+  hours: '{{.N}} u'
+  hours_minutes: '{{.H}} u {{.M}} min'
+  ingredients: Ingrediënten
+  listening: Zeg “next step”
+  minutes: '{{.N}} min'
+  more: Meer tonen
+  need: Voor deze stap
+  next: Volgende
+  nofavorites: Nog geen favoriete recepten
+  none: Geen recepten gevonden
+  page: Recepten
+  prep: Voorbereiding {{.Time}}
+  search: Recepten zoeken
+  servings: '{{.N}} porties'
+  setup:
+    _: Mealie koppelen
+    hint: Voer je Mealie-server en API-token in
+  status:
+    _: Status
+    connecting: Verbinden…
+    ready: Verbonden
+    token: Mealie weigerde het API-token
+    unreachable: Mealie niet bereikbaar
+    unset: Niet ingesteld
+  step: Stap {{.N}} van {{.Of}}
+  steps: Stappen
+  timer: Timer van {{.Time}} starten
 reply:
   download: Start later, zonder haperingen
   stream: Start eerder, kan haperen
@@ -2772,6 +2846,9 @@ voice:
       call_hangup:
         _: Een oproep beëindigen
         help: Laat zinnen in Home Assistant Assist zoals "ophangen" een oproep beëindigen of weigeren
+      recipes:
+        _: Koken met recepten
+        help: Laat zinnen in Home Assistant Assist recepten zoeken, beginnen met koken en door de stappen gaan op dit apparaat
       youtube_tv:
         _: YouTube TV kijken
         help: Laat zinnen in Home Assistant Assist een YouTube TV-zender aanzetten of zeggen wat er op is
@@ -2779,6 +2856,9 @@ voice:
       _: Alle acties
       help: Biedt de gesproken zinnen van dit apparaat aan Home Assistant Assist aan; uit trekt ze allemaal in
     command:
+      cook:
+        _: Kookmodus
+        help: Met de kookmodus open gaat "next step", "previous step" of "start timer" (in het Engels) door het recept
       mirror:
         _: Spiegel
         help: '"Spiegel" zeggen opent de spiegelweergave van de camera'

@@ -76,6 +76,8 @@ func (c *Commands) Live() bool {
 	return false
 }
 
+func (c *Commands) Allowed(name string) bool { return c.allow(name) }
+
 func (c *Commands) Refresh() { c.publish() }
 
 func (c *Commands) Listen(h Hook) (cancel func()) {

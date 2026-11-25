@@ -188,6 +188,8 @@ var Shared = Coverage{
 		"Todo.Entities":             "todo.entities",
 		"Todo.Completed":            "todo.completed",
 		"TV.Default":                "tv.default",
+		"Mealie.Server":             "mealie.server",
+		"Mealie.Token":              "mealie.token",
 		"Voice.Commands":            "voice.commands",
 		"Voice.Actions":             "voice.actions",
 		"Voice.Label":               "voice.label",
