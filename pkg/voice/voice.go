@@ -81,7 +81,7 @@ func (c *Commands) Refresh() { c.publish() }
 func (c *Commands) Listen(h Hook) (cancel func()) {
 	terms := make([]string, 0, len(h.Keywords))
 	for _, k := range h.Keywords {
-		if t := Normalize(k); t != "" {
+		if t := NormalizeIn(English(), k); t != "" {
 			terms = append(terms, t)
 		}
 	}
@@ -104,7 +104,7 @@ func (c *Commands) Listen(h Hook) (cancel func()) {
 }
 
 func (c *Commands) Hear(text string) {
-	said := Normalize(text)
+	said := NormalizeIn(English(), text)
 	if said == "" {
 		return
 	}

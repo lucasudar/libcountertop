@@ -23,41 +23,73 @@ actions:
   alarm:
     _: Manage alarms
     ambiguous: More than one alarm matches; say its name
+    daily: every day
     delete: Deleted {{.Alarm}}
     disable: Disabled {{.Alarm}}
     empty: You have no saved alarms
     enable: Enabled {{.Alarm}}
     exists: '{{.Alarm}} already exists'
     missing: No saved alarm matches that name or time
+    named: '{{.Name}} at {{.Clock}}'
     next: Your next alarm is {{.Alarm}}, {{.When}}
     none: You have no upcoming alarm
     not_ringing: No alarm is ringing
     not_snoozed: No ringing alarm can be snoozed
     'off': '{{.Alarm}}, disabled'
     once: one time
+    sentence:
+      delete: (delete|remove|cancel) [my|the] {target} alarm
+      disable: (disable|turn off) [my|the] {target} alarm
+      enable: (enable|turn on) [my|the] {target} alarm
+      list: list [my] alarms
+      list_what: what are my alarms
+      next: when is [my|the] next alarm
+      set: (set|create|add) [a|an] alarm (for|at) {time}
+      set_named: (set|create|add) [a|an] alarm (called|named) {name} (for|at) {time}
+      snooze: snooze [my|the] alarm
+      snooze_bare: snooze
+      stop: (stop|dismiss) [my|the] alarm
     set: Set {{.Alarm}}
     snoozed: Alarm snoozed
     stopped: Alarm stopped
     target: Say the alarm name, time, or next alarm
     time: Say a time such as seven thirty AM, optionally followed by every weekday, every weekend, every day, or on named weekdays
+    weekdays: weekdays
+    weekends: weekends
+    when: '{{.Day}} at {{.Clock}}'
   broadcast:
     _: Broadcast a message
     ask: Go ahead after the tone
+    sentence:
+      ask: (broadcast|announce)
+      message: (broadcast|announce) {message}
+      send: send a broadcast
     text: Broadcasting typed text needs the Home Assistant integration
   call:
     _: Call a device
     busy: Already in a call
     foreign: '{{.Peer}} isn''t in this home'
+    sentence:
+      call: (call|ring|intercom) [the] {peer}
+      video: video call [the] {peer}
     unknown: There's no device called {{.Peer}}
     unreachable: '{{.Peer}} can''t be reached'
   call_answer:
     _: Answer a call
     done: Answering the call
     none: No incoming call to answer
+    sentence:
+      bare: answer
+      call: answer [the] (call|phone)
+      video: answer [the] video call
   call_hangup:
     _: Hang up a call
     done: Call ended
     none: No call to hang up
+    sentence:
+      bare: hang up
+      call: hang up [the] (call|phone)
+      end: (end|decline|reject) [the] call
   youtube_tv:
     _: Watch YouTube TV
     airing: '{{.Channel}} is showing {{.Title}}'
@@ -68,6 +100,11 @@ actions:
       channel: Playing {{.Channel}}
     nothing: Nothing is listed on {{.Channel}} right now
     nowhere: Choose a default TV in the TV app
+    sentence:
+      watch: (watch|put on) {channel}
+      watch_on: (watch|put on) {channel} on [the] {device}
+      what_is_on: what is on {channel}
+      whats_on: what's on {channel}
     unknown: I looked for {{.Channel}} on YouTube TV, but it either isn't available or can't be played right now
     watching:
       _: Playing {{.Show}} on {{.Channel}} on {{.Device}}
@@ -2772,6 +2809,9 @@ voice:
     label:
       _: Home Assistant names to listen for
       help: Home Assistant label whose entity names the recognizer listens for, besides area names
+    language:
+      _: Voice actions language
+      help: Language of the voice action sentences this device answers and of its spoken replies
   title: Voice triggers
 voicematch:
   accept: Accept

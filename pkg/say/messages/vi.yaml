@@ -23,41 +23,73 @@ actions:
   alarm:
     _: Quản lý báo thức
     ambiguous: Có nhiều báo thức trùng khớp; hãy đọc tên
+    daily: hằng ngày
     delete: Đã xóa {{.Alarm}}
     disable: Đã tắt {{.Alarm}}
     empty: Bạn không có báo thức nào đã lưu
     enable: Đã bật {{.Alarm}}
     exists: '{{.Alarm}} đã tồn tại'
     missing: Không có báo thức nào khớp tên hoặc giờ đó
+    named: '{{.Name}} lúc {{.Clock}}'
     next: Báo thức tiếp theo của bạn là {{.Alarm}}, {{.When}}
     none: Bạn không có báo thức sắp tới
     not_ringing: Không có báo thức nào đang reo
     not_snoozed: Không có báo thức đang reo để báo lại
     'off': '{{.Alarm}}, đã tắt'
     once: một lần
+    sentence:
+      delete: (xóa|xoá|hủy|huỷ) báo thức {target}
+      disable: tắt báo thức {target}
+      enable: (bật|kích hoạt) báo thức {target}
+      list: liệt kê [các] báo thức [của tôi]
+      list_what: (tôi có|có) những báo thức nào
+      next: báo thức tiếp theo (là|vào) (lúc nào|khi nào)
+      set: (đặt|tạo|thêm) [một] báo thức (lúc|vào lúc|vào|cho) {time}
+      set_named: (đặt|tạo|thêm) [một] báo thức (tên|tên là|có tên) {name} (lúc|vào lúc|vào) {time}
+      snooze: (hoãn|tạm hoãn) báo thức
+      snooze_bare: báo lại
+      stop: (dừng|tắt) báo thức
     set: Đặt {{.Alarm}}
     snoozed: Đã báo lại báo thức
     stopped: Đã dừng báo thức
     target: Đọc tên báo thức, giờ hoặc báo thức tiếp theo
     time: Đọc giờ như bảy giờ ba mươi sáng, có thể kèm mỗi ngày thường, mỗi cuối tuần, mỗi ngày, hoặc vào các thứ được nêu tên
+    weekdays: các ngày trong tuần
+    weekends: cuối tuần
+    when: '{{.Day}} lúc {{.Clock}}'
   broadcast:
     _: Phát một thông báo
     ask: Nói sau tiếng chuông
+    sentence:
+      ask: (thông báo|phát thông báo)
+      message: (thông báo|phát thông báo) {message}
+      send: gửi thông báo
     text: Phát văn bản đã nhập cần tích hợp Home Assistant
   call:
     _: Gọi thiết bị
     busy: Đang trong cuộc gọi
     foreign: '{{.Peer}} không thuộc nhà này'
+    sentence:
+      call: (gọi|gọi điện) cho {peer}
+      video: gọi video cho {peer}
     unknown: Không có thiết bị nào tên {{.Peer}}
     unreachable: Không thể liên lạc {{.Peer}}
   call_answer:
     _: Trả lời cuộc gọi
     done: Đang trả lời cuộc gọi
     none: Không có cuộc gọi đến để trả lời
+    sentence:
+      bare: nghe máy
+      call: (trả lời|nghe) [cuộc] (gọi|điện thoại)
+      video: (trả lời|nghe) [cuộc] gọi video
   call_hangup:
     _: Gác máy
     done: Đã kết thúc cuộc gọi
     none: Không có cuộc gọi để gác
+    sentence:
+      bare: cúp máy
+      call: (cúp|tắt) [cuộc] (gọi|điện thoại)
+      end: (kết thúc|từ chối) cuộc gọi
   youtube_tv:
     _: Xem YouTube TV
     airing: '{{.Channel}} đang chiếu {{.Title}}'
@@ -68,6 +100,11 @@ actions:
       channel: Đang phát {{.Channel}}
     nothing: Hiện không có gì trên {{.Channel}}
     nowhere: Chọn TV mặc định trong ứng dụng TV
+    sentence:
+      watch: (xem|mở) {channel}
+      watch_on: (xem|mở) {channel} trên {device}
+      what_is_on: trên {channel} đang có gì
+      whats_on: '{channel} đang chiếu gì'
     unknown: Tôi đã tìm {{.Channel}} trên YouTube TV, nhưng kênh không khả dụng hoặc không thể phát lúc này
     watching:
       _: Đang phát {{.Show}} trên {{.Channel}} trên {{.Device}}
@@ -2757,6 +2794,9 @@ voice:
     label:
       _: Tên Home Assistant cần nghe
       help: Nhãn Home Assistant mà bộ nhận dạng nghe tên các thực thể của nó, ngoài tên khu vực
+    language:
+      _: Ngôn ngữ hành động giọng nói
+      help: Ngôn ngữ của các câu lệnh hành động giọng nói mà thiết bị này trả lời và của lời đáp
   title: Kích hoạt giọng nói
 voicematch:
   accept: Chấp nhận

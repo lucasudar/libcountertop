@@ -23,41 +23,73 @@ actions:
   alarm:
     _: Gestisci sveglie
     ambiguous: Più sveglie corrispondono; di' il nome
+    daily: ogni giorno
     delete: Eliminata {{.Alarm}}
     disable: Disattivata {{.Alarm}}
     empty: Non hai sveglie salvate
     enable: Attivata {{.Alarm}}
     exists: '{{.Alarm}} esiste già'
     missing: Nessuna sveglia salvata corrisponde a quel nome o orario
+    named: '{{.Name}} alle {{.Clock}}'
     next: La prossima sveglia è {{.Alarm}}, {{.When}}
     none: Non hai sveglie in programma
     not_ringing: Nessuna sveglia sta suonando
     not_snoozed: Nessuna sveglia in corso da posticipare
     'off': '{{.Alarm}}, disattivata'
     once: una volta
+    sentence:
+      delete: (elimina|cancella|rimuovi) [la] sveglia {target}
+      disable: (disattiva|spegni) [la] sveglia {target}
+      enable: (attiva|accendi) [la] sveglia {target}
+      list: (elenca|mostra) [le] [mie] sveglie
+      list_what: quali sono le mie sveglie
+      next: quando (suona|è) la prossima sveglia
+      set: (imposta|metti|crea|aggiungi) [una] sveglia (per le|per|alle|alla|a) {time}
+      set_named: (imposta|metti|crea|aggiungi) [una] sveglia (chiamata|di nome) {name} (per le|per|alle|alla|a) {time}
+      snooze: (posticipa|rimanda) [la] sveglia
+      snooze_bare: (posticipa|rimanda)
+      stop: (ferma|spegni) [la] sveglia
     set: Impostata {{.Alarm}}
     snoozed: Sveglia posticipata
     stopped: Sveglia fermata
     target: Di' il nome della sveglia, l'orario o prossima sveglia
     time: Di' un orario come sette e trenta, seguito eventualmente da ogni giorno feriale, ogni weekend, ogni giorno o da giorni della settimana
+    weekdays: nei giorni feriali
+    weekends: nel fine settimana
+    when: '{{.Day}} alle {{.Clock}}'
   broadcast:
     _: Trasmetti un messaggio
     ask: Parla dopo il segnale
+    sentence:
+      ask: (annuncia|trasmetti)
+      message: (annuncia|trasmetti) {message}
+      send: (invia|manda) un annuncio
     text: Per trasmettere testo scritto serve l'integrazione Home Assistant
   call:
     _: Chiama un dispositivo
     busy: Già in chiamata
     foreign: '{{.Peer}} non è in questa casa'
+    sentence:
+      call: (chiama|citofona) {peer}
+      video: (videochiama|fai una videochiamata (a|con)) {peer}
     unknown: Nessun dispositivo chiamato {{.Peer}}
     unreachable: '{{.Peer}} non è raggiungibile'
   call_answer:
     _: Rispondi a una chiamata
     done: Rispondo alla chiamata
     none: Nessuna chiamata in arrivo a cui rispondere
+    sentence:
+      bare: rispondi
+      call: rispondi [alla] (chiamata|telefonata)
+      video: rispondi [alla] videochiamata
   call_hangup:
     _: Chiudi una chiamata
     done: Chiamata terminata
     none: Nessuna chiamata da chiudere
+    sentence:
+      bare: riattacca
+      call: (chiudi|termina) [la] (chiamata|telefonata)
+      end: (rifiuta|ignora) [la] chiamata
   youtube_tv:
     _: Guarda YouTube TV
     airing: Su {{.Channel}} c'è {{.Title}}
@@ -68,6 +100,11 @@ actions:
       channel: Riproduco {{.Channel}}
     nothing: Al momento non c'è niente in programma su {{.Channel}}
     nowhere: Scegli una TV predefinita nell'app TV
+    sentence:
+      watch: (guarda|sintonizza) {channel}
+      watch_on: (guarda|sintonizza) {channel} (sulla|sul|su) {device}
+      what_is_on: che cosa c'è su {channel}
+      whats_on: cosa c'è su {channel}
     unknown: Ho cercato {{.Channel}} su YouTube TV, ma non è disponibile o al momento non si può riprodurre
     watching:
       _: Riproduco {{.Show}} su {{.Channel}} su {{.Device}}
@@ -2758,6 +2795,9 @@ voice:
     label:
       _: Nomi di Home Assistant da ascoltare
       help: Etichetta di Home Assistant le cui entità il riconoscimento ascolta per nome, oltre ai nomi delle aree
+    language:
+      _: Lingua delle azioni vocali
+      help: Lingua delle frasi delle azioni vocali a cui risponde questo dispositivo e delle sue risposte
   title: Comandi vocali
 voicematch:
   accept: Accetta

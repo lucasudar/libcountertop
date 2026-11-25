@@ -191,6 +191,7 @@ var Shared = Coverage{
 		"Voice.Commands":            "voice.commands",
 		"Voice.Actions":             "voice.actions",
 		"Voice.Label":               "voice.label",
+		"Voice.Language":            "voice.language",
 		"Bluetooth.Proxy":           "bluetooth.proxy",
 		"Bluetooth.Speaker":         "bluetooth.speaker",
 		"Bluetooth.Scan":            "bluetooth.scan",
