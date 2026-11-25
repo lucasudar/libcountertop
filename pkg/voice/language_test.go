@@ -167,6 +167,82 @@ func TestVietnameseDays(t *testing.T) {
 	}, []string{"", "ngày mai"})
 }
 
+func TestGermanClock(t *testing.T) {
+	checkClocks(t, For("de"), []clockCase{
+		{"7", 7, 0},
+		{"um 7:30", 7, 30},
+		{"sieben uhr", 7, 0},
+		{"sieben uhr dreißig", 7, 30},
+		{"19 uhr 30", 19, 30},
+		{"halb acht", 7, 30},
+		{"viertel nach sieben", 7, 15},
+		{"viertel vor acht", 7, 45},
+		{"dreiviertel acht", 7, 45},
+		{"zehn nach sieben", 7, 10},
+		{"zehn vor acht", 7, 50},
+		{"fünf vor halb acht", 7, 25},
+		{"fünf nach halb acht", 7, 35},
+		{"einundzwanzig uhr", 21, 0},
+		{"sieben uhr abends", 19, 0},
+		{"halb acht abends", 19, 30},
+		{"sechs uhr morgens", 6, 0},
+		{"ein uhr", 1, 0},
+		{"mittag", 12, 0},
+		{"mitternacht", 0, 0},
+	}, []string{"", "banane", "halb halb", "vierzig nach halb acht", "morgen"})
+}
+
+func TestGermanDays(t *testing.T) {
+	checkDays(t, For("de"), []daysCase{
+		{"jeden tag", everyDay},
+		{"täglich", everyDay},
+		{"werktags", workDays},
+		{"an werktagen", workDays},
+		{"unter der woche", workDays},
+		{"am wochenende", weekend},
+		{"montags", []time.Weekday{time.Monday}},
+		{"montag und freitag", []time.Weekday{time.Monday, time.Friday}},
+		{"von montag bis freitag", workDays},
+	}, []string{"", "morgen"})
+}
+
+func TestDutchClock(t *testing.T) {
+	checkClocks(t, For("nl"), []clockCase{
+		{"7", 7, 0},
+		{"om 7:30", 7, 30},
+		{"zeven uur", 7, 0},
+		{"zeven uur dertig", 7, 30},
+		{"half acht", 7, 30},
+		{"kwart over zeven", 7, 15},
+		{"kwart voor acht", 7, 45},
+		{"tien over zeven", 7, 10},
+		{"tien voor acht", 7, 50},
+		{"tien over half acht", 7, 40},
+		{"vijf voor half acht", 7, 25},
+		{"eenentwintig uur", 21, 0},
+		{"tweeëntwintig uur", 22, 0},
+		{"acht uur 's avonds", 20, 0},
+		{"zes uur 's ochtends", 6, 0},
+		{"twee uur 's middags", 14, 0},
+		{"een uur", 1, 0},
+		{"middernacht", 0, 0},
+	}, []string{"", "banaan", "half half", "veertig over half acht", "morgen"})
+}
+
+func TestDutchDays(t *testing.T) {
+	checkDays(t, For("nl"), []daysCase{
+		{"elke dag", everyDay},
+		{"dagelijks", everyDay},
+		{"doordeweeks", workDays},
+		{"op werkdagen", workDays},
+		{"in het weekend", weekend},
+		{"maandags", []time.Weekday{time.Monday}},
+		{"maandag en vrijdag", []time.Weekday{time.Monday, time.Friday}},
+		{"maandag tot en met vrijdag", workDays},
+		{"van maandag t/m vrijdag", workDays},
+	}, []string{"", "morgen"})
+}
+
 func TestNumbers(t *testing.T) {
 	for _, c := range []struct {
 		tag, said, want string
@@ -178,6 +254,12 @@ func TestNumbers(t *testing.T) {
 		{"vi", "phòng hai", "phòng 2"},
 		{"vi", "hai mươi lăm", "25"},
 		{"vi", "mười lăm", "15"},
+		{"de", "schlafzimmer zwei", "schlafzimmer 2"},
+		{"de", "einundzwanzig dreißig", "21 30"},
+		{"de", "ein licht", "ein licht"},
+		{"nl", "slaapkamer twee", "slaapkamer 2"},
+		{"nl", "drieëntwintig vijfenveertig", "23 45"},
+		{"nl", "een lamp", "een lamp"},
 	} {
 		if got := strings.Join(For(c.tag).Numbers(strings.Fields(c.said)), " "); got != c.want {
 			t.Errorf("%s %q read as %q, want %q", c.tag, c.said, got, c.want)
@@ -193,6 +275,8 @@ func TestTrimArticles(t *testing.T) {
 		{"it", "la cucina", "cucina"},
 		{"it", "l'ingresso", "ingresso"},
 		{"vi", "phòng bếp", "phòng bếp"},
+		{"de", "die küche", "küche"},
+		{"nl", "de keuken", "keuken"},
 	} {
 		if got := TrimArticles(For(c.tag), c.said); got != c.want {
 			t.Errorf("%s %q trimmed to %q, want %q", c.tag, c.said, got, c.want)

@@ -212,6 +212,10 @@ func TestVoiceSetsAlarmsInTheVoiceLanguage(t *testing.T) {
 		{"it", "otto meno un quarto nei giorni feriali", "nei giorni feriali", 7, 45, "mon,tue,wed,thu,fri"},
 		{"vi", "bảy giờ rưỡi sáng mỗi ngày", "hằng ngày", 7, 30, "sun,mon,tue,wed,thu,fri,sat"},
 		{"vi", "6 giờ chiều vào thứ hai và thứ sáu", "Thứ Hai", 18, 0, "mon,fri"},
+		{"de", "halb acht werktags", "werktags", 7, 30, "mon,tue,wed,thu,fri"},
+		{"de", "viertel vor sieben jeden tag", "jeden Tag", 6, 45, "sun,mon,tue,wed,thu,fri,sat"},
+		{"nl", "half acht doordeweeks", "op werkdagen", 7, 30, "mon,tue,wed,thu,fri"},
+		{"nl", "kwart over zes in het weekend", "in het weekend", 6, 15, "sun,sat"},
 	} {
 		t.Run(tc.tag+" "+tc.time, func(t *testing.T) {
 			say.UseVoice(tc.tag)

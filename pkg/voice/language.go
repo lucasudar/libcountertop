@@ -18,7 +18,13 @@ type Language interface {
 	Next() []string
 }
 
-var languages = map[string]Language{"en": english{}, "it": italian{}, "vi": vietnamese{}}
+var languages = map[string]Language{
+	"de": german{},
+	"en": english{},
+	"it": italian{},
+	"nl": dutch{},
+	"vi": vietnamese{},
+}
 
 func Current() Language { return For(say.Voice()) }
 
