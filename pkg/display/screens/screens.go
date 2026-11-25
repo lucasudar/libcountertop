@@ -239,6 +239,8 @@ type App struct {
 	papering  bool
 	homeDrawn bool
 
+	moves mover
+
 	mu sync.Mutex
 	w  *gogui.Window
 	r  *backend.Renderer
@@ -542,7 +544,8 @@ func (a *App) Run(ctx context.Context) error {
 
 	stopShell := sh.Redrawn.Listen(func(struct{}) { redraw() })
 	defer stopShell()
-	stopMoved := sh.Changed.Listen(func(shell.Change) {
+	stopMoved := sh.Changed.Listen(func(c shell.Change) {
+		a.changed(c)
 		w.QueueCommand(func(w *gogui.Window) {
 			a.ui.Editor.Shift, a.ui.Editor.Symbols = false, false
 			w.ClearFocus()

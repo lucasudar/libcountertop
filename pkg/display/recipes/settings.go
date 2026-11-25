@@ -5,12 +5,14 @@ import (
 
 	"github.com/ygelfand/libcountertop/pkg/display/menu"
 	"github.com/ygelfand/libcountertop/pkg/display/shell"
+	"github.com/ygelfand/libcountertop/pkg/media/mealie"
 	"github.com/ygelfand/libcountertop/pkg/say"
 	setting "github.com/ygelfand/libcountertop/pkg/settings"
 )
 
-func (a *App) Page() *shell.Page {
-	k := a.o.Kitchen
+func (a *App) Page() *shell.Page { return SettingsPage(a.o.Kitchen) }
+
+func SettingsPage(k *mealie.Kitchen) *shell.Page {
 	return &shell.Page{
 		Title: say.T("recipes.page"),
 		Build: func() ([]menu.Row, []func(int)) {

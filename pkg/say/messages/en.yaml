@@ -1071,6 +1071,9 @@ features:
   cast:
     _: Cast receiver
     hint: Cast from a phone or an app
+  mealie:
+    _: Mealie
+    hint: Recipes and cook mode
   proxy:
     _: Bluetooth proxy
     hint: Bluetooth LE proxy for Home Assistant

@@ -1065,6 +1065,9 @@ features:
   cast:
     _: Cast-receiver
     hint: Casten vanaf een telefoon of app
+  mealie:
+    _: Mealie
+    hint: Recepten en kookmodus
   proxy:
     _: Bluetooth-proxy
     hint: Bluetooth LE-proxy voor Home Assistant

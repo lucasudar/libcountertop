@@ -1065,6 +1065,9 @@ features:
   cast:
     _: Bộ nhận Cast
     hint: Phát từ điện thoại hoặc ứng dụng
+  mealie:
+    _: Mealie
+    hint: Công thức và chế độ nấu ăn
   proxy:
     _: Proxy Bluetooth
     hint: Proxy Bluetooth LE cho Home Assistant

@@ -1065,6 +1065,9 @@ features:
   cast:
     _: Cast-Receiver
     hint: Von einem Telefon oder einer App casten
+  mealie:
+    _: Mealie
+    hint: Rezepte und Kochmodus
   proxy:
     _: Bluetooth-Proxy
     hint: Bluetooth-LE-Proxy für Home Assistant
