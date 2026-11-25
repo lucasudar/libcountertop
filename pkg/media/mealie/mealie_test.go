@@ -214,13 +214,11 @@ func TestTheKitchenConnectsAndListsFavorites(t *testing.T) {
 func TestAFailedRecipeLoadsOnTheNextOpen(t *testing.T) {
 	k, srv, _ := rig(t, "secret")
 	srv.failing = 1
-	k.Recipe("pasta")
 	eventually(t, func() bool { _, _, done := k.Recipe("pasta"); return done })
 	if _, err, _ := k.Recipe("pasta"); err == nil {
 		t.Fatal("the first load did not fail")
 	}
 	k.Refresh()
-	k.Recipe("pasta")
 	eventually(t, func() bool { _, err, done := k.Recipe("pasta"); return done && err == nil })
 	if r, _, _ := k.Recipe("pasta"); r.Name != "Pasta al pomodoro" {
 		t.Errorf("reopened recipe %q, want Pasta al pomodoro", r.Name)
