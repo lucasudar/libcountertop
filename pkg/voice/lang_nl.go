@@ -157,7 +157,18 @@ func dutchMinutes(word string) (int, bool) {
 
 func (dutch) Days(text string) ([]time.Weekday, bool) {
 	text = strings.NewReplacer("tot en met", "t/m").Replace(strings.ToLower(text))
-	w := dropLeading(fields(text), "elke", "iedere", "ieder", "alle", "op", "in", "het", "de", "van")
+	w := dropLeading(
+		fields(text),
+		"elke",
+		"iedere",
+		"ieder",
+		"alle",
+		"op",
+		"in",
+		"het",
+		"de",
+		"van",
+	)
 	switch strings.Join(w, " ") {
 	case "dag", "dagen", "dagelijks":
 		return everyDay, true
