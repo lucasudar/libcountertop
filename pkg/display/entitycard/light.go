@@ -70,7 +70,7 @@ func (c *Card) lightBody(w *gogui.Window, e Entity, width float32) []gogui.View 
 			},
 		}
 		x := c.held(d, now)
-		says := say.T("card.light.waiting")
+		says := say.T("common.states.waiting")
 		if ready {
 			says = strconv.Itoa(int(math.Round(lo+x*(hi-lo)))) + " K"
 		}

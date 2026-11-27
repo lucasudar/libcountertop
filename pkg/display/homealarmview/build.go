@@ -129,7 +129,7 @@ func (f *face) sheet(sk skin) gogui.View {
 		f.key(key{
 			id: "sheet-cancel", w: (inner - pad*0.6) / 2, h: foot, fill: sk.key, ink: sk.onKey(),
 			edge: sk.edge, edgeWide: sk.edgeWide, radius: sk.radius, align: gogui.HAlignCenter,
-			content: []gogui.View{sk.label(say.T("homealarm.cancel"), foot*0.36, sk.onKey(), true)},
+			content: []gogui.View{sk.label(say.T("common.actions.cancel"), foot*0.36, sk.onKey(), true)},
 			run:     f.v.cancel,
 		}),
 		f.key(key{

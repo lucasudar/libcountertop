@@ -52,7 +52,7 @@ func (view *Renderer) CalendarPage() *shell.Page {
 			case err != nil:
 				return append(rows,
 						menu.Row{Label: say.T("home.failed"), Hint: err.Error()},
-						menu.Row{Label: say.T("home.retry")},
+						menu.Row{Label: say.T("common.actions.retry")},
 					),
 					append(taps, nil, func(int) { c.Fetch() })
 			case len(list) == 0:

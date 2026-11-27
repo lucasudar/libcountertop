@@ -66,7 +66,7 @@ func (a *Alarms) List() *shell.Page {
 			taps = append(taps, func(int) { a.o.Shell.Push(a.Edit(al)) })
 		}
 		rows = append(rows, menu.Row{Glyph: "mdi:plus", Label: say.T("alarm.add")})
-		taps = append(taps, func(int) { a.o.Shell.Push(a.Edit(fresh())) })
+		taps = append(taps, func(int) { a.o.Shell.Push(a.Edit(alarm.Default())) })
 		return rows, taps
 	}}
 }
@@ -159,7 +159,7 @@ func (a *Alarms) Edit(start alarm.Alarm) *shell.Page {
 		})
 	}
 	page.Actions = append(page.Actions, shell.Action{
-		Label: say.T("alarm.save"), Glyph: "mdi:content-save-outline",
+		Label: say.T("common.actions.save"), Glyph: "mdi:content-save-outline",
 		Do: func() {
 			if _, err := a.o.Alarms.Set(d.Alarm); err != nil {
 				slog.Error("saving an alarm failed", "err", err)
@@ -257,17 +257,6 @@ func (a *Alarms) toneOf(c schema.Chime) tone {
 	return tone{chime: c, label: c.Label()}
 }
 
-func fresh() alarm.Alarm {
-	return alarm.Alarm{
-		Hour:   7,
-		On:     true,
-		Sound:  schema.ChimeTimer,
-		Snooze: 9 * time.Minute,
-		Volume: alarm.VolumeGentle,
-		Ramp:   time.Minute,
-	}
-}
-
 func glyph(al alarm.Alarm) string {
 	if al.On {
 		return "mdi:alarm"
@@ -277,9 +266,9 @@ func glyph(al alarm.Alarm) string {
 
 func onOff(on bool) string {
 	if on {
-		return say.T("alarm.state.on")
+		return say.T("common.states.on")
 	}
-	return say.T("alarm.state.off")
+	return say.T("common.states.off")
 }
 
 func days(d alarm.Weekdays) string {
@@ -304,7 +293,7 @@ func days(d alarm.Weekdays) string {
 
 func minutesOrOff(d time.Duration) string {
 	if d <= 0 {
-		return say.T("alarm.off")
+		return say.T("common.states.off")
 	}
 	return say.F("alarm.minutes", map[string]any{"N": int(d / time.Minute)})
 }

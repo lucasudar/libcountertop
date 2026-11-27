@@ -74,7 +74,7 @@ func (v *View) lightBody(
 			},
 		}
 		x := v.held(d, now)
-		says := say.T("tessera.light.waiting")
+		says := say.T("common.states.waiting")
 		if ready {
 			says = strconv.Itoa(int(math.Round(lo+x*(hi-lo)))) + " K"
 		}
