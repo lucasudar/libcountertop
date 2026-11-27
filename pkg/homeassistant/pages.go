@@ -8,8 +8,13 @@ import (
 	"strings"
 )
 
-// An encrypted ESPHome frame carries at most 65,515 bytes.
+// An encrypted ESPHome frame carries at most 65,515 bytes, and Home Assistant does not check: a
+// larger action response goes out with its length wrapped, the device cannot decrypt the frame and
+// the connection drops. Anything that can grow past this is fetched in pages.
 const pageBudget = 40000
+
+// PageBudget is the most bytes of items one page carries, for templates outside this package.
+const PageBudget = pageBudget
 
 const pageTemplate = `{%- set ns = namespace(seen=0, parts=[], size=2, next=none) -%}
 {%- for s in SOURCE if WHERE -%}
@@ -57,9 +62,20 @@ func (l listing) page(start int) string {
 type render func(ctx context.Context, tmpl string) (json.RawMessage, error)
 
 func listAll[T any](ctx context.Context, ask render, l listing) ([]T, error) {
+	return Paged[T](ctx, func(ctx context.Context, start int) (json.RawMessage, error) {
+		return ask(ctx, l.page(start))
+	})
+}
+
+// Paged asks for one page after another, each answered as {"next": <start or null>, "items": [...]},
+// until a page has no next.
+func Paged[T any](
+	ctx context.Context,
+	ask func(ctx context.Context, start int) (json.RawMessage, error),
+) ([]T, error) {
 	out := []T{}
 	for start := 0; ; {
-		raw, err := ask(ctx, l.page(start))
+		raw, err := ask(ctx, start)
 		if err != nil {
 			return nil, err
 		}

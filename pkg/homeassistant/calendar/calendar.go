@@ -24,7 +24,6 @@ const (
 	stale        = 5 * time.Minute
 	eventsAction = "calendar.get_events"
 	createAction = "calendar.create_event"
-	eventsShape  = "{{ response | to_json }}"
 	dayLayout    = "2006-01-02"
 	wireLayout   = "2006-01-02 15:04:05"
 	features     = "supported_features"
@@ -283,14 +282,20 @@ func (c *Calendar) Refresh() {
 	go func() {
 		ctx, cancel := context.WithTimeout(context.Background(), fetchWait)
 		defer cancel()
-		raw, err := c.opts.Controller.Ask(ctx, eventsAction, map[string]string{
+		data := map[string]string{
 			"entity_id":       strings.Join(chosen, ","),
 			"start_date_time": want.from.Format(wireLayout),
 			"end_date_time":   want.to.Format(wireLayout),
-		}, nil, eventsShape)
+		}
+		list, err := homeassistant.Paged[wire](
+			ctx,
+			func(ctx context.Context, start int) (json.RawMessage, error) {
+				return c.opts.Controller.Ask(ctx, eventsAction, data, nil, eventsPage(start))
+			},
+		)
 		var events []Event
 		if err == nil {
-			events, err = parse(raw, want.from.Location())
+			events = parse(list, want.from.Location())
 		}
 		c.mu.Lock()
 		c.asking = false
@@ -348,7 +353,38 @@ func (c *Calendar) Create(ctx context.Context, d Draft) error {
 	return nil
 }
 
+// eventsPageTemplate pages calendar.get_events: a busy month of several calendars runs to well
+// over one ESPHome frame (homeassistant.PageBudget). An event too big for a page on its own goes
+// without its description.
+const eventsPageTemplate = `{%- set ns = namespace(seen=0, parts=[], size=2, next=none) -%}
+{%- for id in response | sort -%}
+{%- for e in response[id].events -%}
+{%- if ns.next is none and ns.seen >= START -%}
+{%- set j = {'calendar': id, 'start': e.start, 'end': e.end, 'summary': e.get('summary'), 'location': e.get('location'), 'description': e.get('description')} | to_json(ensure_ascii=True) -%}
+{%- if j | length > BUDGET -%}
+{%- set j = {'calendar': id, 'start': e.start, 'end': e.end, 'summary': (e.get('summary') or '')[:200], 'location': (e.get('location') or '')[:200]} | to_json(ensure_ascii=True) -%}
+{%- endif -%}
+{%- if ns.parts and ns.size + (j | length) + 1 > BUDGET -%}
+{%- set ns.next = ns.seen -%}
+{%- else -%}
+{%- set ns.parts = ns.parts + [j] -%}
+{%- set ns.size = ns.size + (j | length) + 1 -%}
+{%- endif -%}
+{%- endif -%}
+{%- set ns.seen = ns.seen + 1 -%}
+{%- endfor -%}
+{%- endfor -%}
+{"next": {{ ns.next | to_json }}, "items": [{{ ns.parts | join(',') }}]}`
+
+func eventsPage(start int) string {
+	return strings.NewReplacer(
+		"START", strconv.Itoa(start),
+		"BUDGET", strconv.Itoa(homeassistant.PageBudget),
+	).Replace(eventsPageTemplate)
+}
+
 type wire struct {
+	Calendar    string `json:"calendar"`
 	Start       string `json:"start"`
 	End         string `json:"end"`
 	Summary     string `json:"summary"`
@@ -356,34 +392,26 @@ type wire struct {
 	Description string `json:"description"`
 }
 
-func parse(raw json.RawMessage, loc *time.Location) ([]Event, error) {
-	var lists map[string]struct {
-		Events []wire `json:"events"`
-	}
-	if err := json.Unmarshal(raw, &lists); err != nil {
-		return nil, fmt.Errorf("calendar: the events: %w", err)
-	}
+func parse(list []wire, loc *time.Location) []Event {
 	var out []Event
-	for entity, list := range lists {
-		for _, w := range list.Events {
-			start, allDay, err := when(w.Start, loc)
-			if err != nil {
-				continue
-			}
-			end, _, err := when(w.End, loc)
-			if err != nil {
-				end = start
-			}
-			out = append(out, Event{
-				Calendar:    entity,
-				Summary:     w.Summary,
-				Location:    w.Location,
-				Description: w.Description,
-				Start:       start,
-				End:         end,
-				AllDay:      allDay,
-			})
+	for _, w := range list {
+		start, allDay, err := when(w.Start, loc)
+		if err != nil {
+			continue
 		}
+		end, _, err := when(w.End, loc)
+		if err != nil {
+			end = start
+		}
+		out = append(out, Event{
+			Calendar:    w.Calendar,
+			Summary:     w.Summary,
+			Location:    w.Location,
+			Description: w.Description,
+			Start:       start,
+			End:         end,
+			AllDay:      allDay,
+		})
 	}
 	slices.SortFunc(out, func(a, b Event) int {
 		if a.AllDay != b.AllDay && a.Start.Equal(b.Start) {
@@ -394,7 +422,7 @@ func parse(raw json.RawMessage, loc *time.Location) ([]Event, error) {
 		}
 		return a.Start.Compare(b.Start)
 	})
-	return out, nil
+	return out
 }
 
 func when(s string, loc *time.Location) (time.Time, bool, error) {

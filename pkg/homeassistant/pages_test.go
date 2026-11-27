@@ -81,3 +81,24 @@ func TestPageTemplateCarriesItsPosition(t *testing.T) {
 		}
 	}
 }
+
+func TestPagedAsksFromEachNext(t *testing.T) {
+	answers := map[int]string{
+		0:  `{"next": 40, "items": [{"id":"a"}]}`,
+		40: `{"next": null, "items": [{"id":"b"}]}`,
+	}
+	var asked []int
+	got, err := Paged[item](
+		context.Background(),
+		func(_ context.Context, start int) (json.RawMessage, error) {
+			asked = append(asked, start)
+			return json.RawMessage(answers[start]), nil
+		},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got) != 2 || got[0].ID != "a" || got[1].ID != "b" || len(asked) != 2 || asked[1] != 40 {
+		t.Errorf("got %v after asking %v", got, asked)
+	}
+}
