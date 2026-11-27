@@ -282,17 +282,17 @@ func (c *Calendar) Refresh() {
 	go func() {
 		ctx, cancel := context.WithTimeout(context.Background(), fetchWait)
 		defer cancel()
-		data := map[string]string{
-			"entity_id":       strings.Join(chosen, ","),
-			"start_date_time": want.from.Format(wireLayout),
-			"end_date_time":   want.to.Format(wireLayout),
-		}
-		list, err := homeassistant.Paged[wire](
-			ctx,
-			func(ctx context.Context, start int) (json.RawMessage, error) {
-				return c.opts.Controller.Ask(ctx, eventsAction, data, nil, eventsPage(start))
-			},
+		var (
+			list []wire
+			err  error
 		)
+		for _, id := range chosen {
+			var got []wire
+			if got, err = c.fetch(ctx, id, want); err != nil {
+				break
+			}
+			list = append(list, got...)
+		}
 		var events []Event
 		if err == nil {
 			events = parse(list, want.from.Location())
@@ -353,38 +353,41 @@ func (c *Calendar) Create(ctx context.Context, d Draft) error {
 	return nil
 }
 
-// eventsPageTemplate pages calendar.get_events: a busy month of several calendars runs to well
-// over one ESPHome frame (homeassistant.PageBudget). An event too big for a page on its own goes
-// without its description.
-const eventsPageTemplate = `{%- set ns = namespace(seen=0, parts=[], size=2, next=none) -%}
-{%- for id in response | sort -%}
-{%- for e in response[id].events -%}
-{%- if ns.next is none and ns.seen >= START -%}
-{%- set j = {'calendar': id, 'start': e.start, 'end': e.end, 'summary': e.get('summary'), 'location': e.get('location'), 'description': e.get('description')} | to_json(ensure_ascii=True) -%}
-{%- if j | length > BUDGET -%}
-{%- set j = {'calendar': id, 'start': e.start, 'end': e.end, 'summary': (e.get('summary') or '')[:200], 'location': (e.get('location') or '')[:200]} | to_json(ensure_ascii=True) -%}
-{%- endif -%}
-{%- if ns.parts and ns.size + (j | length) + 1 > BUDGET -%}
-{%- set ns.next = ns.seen -%}
-{%- else -%}
-{%- set ns.parts = ns.parts + [j] -%}
-{%- set ns.size = ns.size + (j | length) + 1 -%}
-{%- endif -%}
-{%- endif -%}
-{%- set ns.seen = ns.seen + 1 -%}
-{%- endfor -%}
-{%- endfor -%}
-{"next": {{ ns.next | to_json }}, "items": [{{ ns.parts | join(',') }}]}`
+const (
+	eventItem  = "{'start': s.start, 'end': s.end, 'summary': s.get('summary'), 'location': s.get('location'), 'description': s.get('description')}"
+	eventSmall = "{'start': s.start, 'end': s.end, 'summary': (s.get('summary') or '')[:200], 'location': (s.get('location') or '')[:200]}"
+)
 
-func eventsPage(start int) string {
-	return strings.NewReplacer(
-		"START", strconv.Itoa(start),
-		"BUDGET", strconv.Itoa(homeassistant.PageBudget),
-	).Replace(eventsPageTemplate)
+func eventsListing(id string) homeassistant.Listing {
+	quoted, _ := json.Marshal(id)
+	return homeassistant.Listing{
+		Source: "response[" + string(quoted) + "].events",
+		Item:   eventItem,
+		Small:  eventSmall,
+	}
+}
+
+func (c *Calendar) fetch(ctx context.Context, id string, want window) ([]wire, error) {
+	data := map[string]string{
+		"entity_id":       id,
+		"start_date_time": want.from.Format(wireLayout),
+		"end_date_time":   want.to.Format(wireLayout),
+	}
+	got, err := homeassistant.ListAll[wire](
+		ctx,
+		func(ctx context.Context, tmpl string) (json.RawMessage, error) {
+			return c.opts.Controller.Ask(ctx, eventsAction, data, nil, tmpl)
+		},
+		eventsListing(id),
+	)
+	for i := range got {
+		got[i].Calendar = id
+	}
+	return got, err
 }
 
 type wire struct {
-	Calendar    string `json:"calendar"`
+	Calendar    string `json:"-"`
 	Start       string `json:"start"`
 	End         string `json:"end"`
 	Summary     string `json:"summary"`

@@ -1,24 +1,15 @@
 package calendar
 
 import (
-	"strconv"
-	"strings"
 	"testing"
 	"time"
-
-	"github.com/ygelfand/libcountertop/pkg/homeassistant"
 )
 
-func TestEventsPageAsksFromItsStartWithinTheBudget(t *testing.T) {
-	page := eventsPage(140)
-	if strings.Contains(page, "START") || strings.Contains(page, "BUDGET") {
-		t.Fatalf("placeholders left in the template:\n%s", page)
-	}
-	if !strings.Contains(page, "ns.seen >= 140") {
-		t.Error("the page does not start at 140")
-	}
-	if !strings.Contains(page, "> "+strconv.Itoa(homeassistant.PageBudget)) {
-		t.Error("the page is not bounded by homeassistant.PageBudget")
+func TestEventsAreListedFromTheirCalendarsResponse(t *testing.T) {
+	if got := eventsListing(
+		`calendar.o'brien`,
+	).Source; got != `response["calendar.o'brien"].events` {
+		t.Errorf("source %s", got)
 	}
 }
 

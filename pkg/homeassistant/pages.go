@@ -8,13 +8,8 @@ import (
 	"strings"
 )
 
-// An encrypted ESPHome frame carries at most 65,515 bytes, and Home Assistant does not check: a
-// larger action response goes out with its length wrapped, the device cannot decrypt the frame and
-// the connection drops. Anything that can grow past this is fetched in pages.
+// An encrypted ESPHome frame carries at most 65,515 bytes.
 const pageBudget = 40000
-
-// PageBudget is the most bytes of items one page carries, for templates outside this package.
-const PageBudget = pageBudget
 
 const pageTemplate = `{%- set ns = namespace(seen=0, parts=[], size=2, next=none) -%}
 {%- for s in SOURCE if WHERE -%}
@@ -35,47 +30,38 @@ PREPARE
 {%- endfor -%}
 {"next": {{ ns.next | to_json }}, "items": [{{ ns.parts | join(',') }}]}`
 
-type listing struct {
-	source  string
-	where   string
-	prepare string
-	item    string
-	small   string
+type Listing struct {
+	Source  string
+	Where   string
+	Prepare string
+	Item    string
+	Small   string
 }
 
-func (l listing) page(start int) string {
-	where := l.where
+func (l Listing) page(start int) string {
+	where := l.Where
 	if where == "" {
 		where = "true"
 	}
 	return strings.NewReplacer(
-		"SOURCE", l.source,
+		"SOURCE", l.Source,
 		"WHERE", where,
 		"START", strconv.Itoa(start),
-		"PREPARE", l.prepare,
-		"ITEM", l.item,
-		"SMALL", l.small,
+		"PREPARE", l.Prepare,
+		"ITEM", l.Item,
+		"SMALL", l.Small,
 		"BUDGET", strconv.Itoa(pageBudget),
 	).Replace(pageTemplate)
 }
 
-type render func(ctx context.Context, tmpl string) (json.RawMessage, error)
-
-func listAll[T any](ctx context.Context, ask render, l listing) ([]T, error) {
-	return Paged[T](ctx, func(ctx context.Context, start int) (json.RawMessage, error) {
-		return ask(ctx, l.page(start))
-	})
-}
-
-// Paged asks for one page after another, each answered as {"next": <start or null>, "items": [...]},
-// until a page has no next.
-func Paged[T any](
+func ListAll[T any](
 	ctx context.Context,
-	ask func(ctx context.Context, start int) (json.RawMessage, error),
+	ask func(ctx context.Context, tmpl string) (json.RawMessage, error),
+	l Listing,
 ) ([]T, error) {
 	out := []T{}
 	for start := 0; ; {
-		raw, err := ask(ctx, start)
+		raw, err := ask(ctx, l.page(start))
 		if err != nil {
 			return nil, err
 		}
