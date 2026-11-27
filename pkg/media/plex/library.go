@@ -559,9 +559,9 @@ func item(m components.Metadata) Item {
 					continue
 				}
 				it.Subtitles = append(it.Subtitles, Subtitle{
-					ID:    strconv.FormatInt(int64(s.ID), 10),
-					Part:  strconv.FormatInt(int64(p.ID), 10),
-					Title: s.DisplayTitle,
+					ID:       strconv.FormatInt(int64(s.ID), 10),
+					Part:     strconv.FormatInt(int64(p.ID), 10),
+					Title:    s.DisplayTitle,
 					Selected: s.Selected != nil && *s.Selected,
 				})
 			}

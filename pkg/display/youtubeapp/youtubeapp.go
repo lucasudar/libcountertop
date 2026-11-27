@@ -389,7 +389,8 @@ func (a *App) feedList(
 		Padding:       gogui.NewPadding(0, style.Reach()*listSide, 0, 0),
 		Color:         gogui.CurrentTheme().Cfg.ColorBackground,
 		ItemView: func(i int, _ float32) gogui.View {
-			if i == len(items)-1 && load != nil && w.ScrollVerticalOffset(widgets.ScrollID(w, id)) < 0 {
+			if i == len(items)-1 && load != nil &&
+				w.ScrollVerticalOffset(widgets.ScrollID(w, id)) < 0 {
 				load()
 			}
 			return gogui.Column(gogui.ContainerCfg{
@@ -406,7 +407,10 @@ func (a *App) feedList(
 	}
 	if load != nil {
 		cfg.AmendLayout = func(e gogui.EventCtx) {
-			if hidden, ok := e.Window.ScrollOverflowY(widgets.ScrollID(e.Window, id)); ok && hidden <= 0 {
+			if hidden, ok := e.Window.ScrollOverflowY(
+				widgets.ScrollID(e.Window, id),
+			); ok &&
+				hidden <= 0 {
 				safe.Go("youtube fill", load)
 			}
 		}

@@ -43,8 +43,11 @@ func (a *App) library(w *gogui.Window, section string) gogui.View {
 	keys = append(keys, a.chip("plex-view-all", "mdi:view-grid-outline", say.T("plex.library"),
 		view == allView, func() { a.look(allView) }))
 	if len(cats) > 0 {
-		keys = append(keys, a.chip("plex-view-genres", "mdi:shape-outline", say.T("plex.categories"),
-			view == genresView, func() { a.look(genresView) }))
+		keys = append(
+			keys,
+			a.chip("plex-view-genres", "mdi:shape-outline", say.T("plex.categories"),
+				view == genresView, func() { a.look(genresView) }),
+		)
 	}
 	tabs := gogui.Row(gogui.ContainerCfg{
 		Sizing: gogui.FillFit, Padding: gogui.NoPadding, Spacing: gogui.SpacingMedium,
@@ -198,7 +201,13 @@ func (a *App) everything(w *gogui.Window, section string) gogui.View {
 	})
 }
 
-func (a *App) listBar(section string, q plex.Query, sorts []plex.Sort, total int, loaded bool) gogui.View {
+func (a *App) listBar(
+	section string,
+	q plex.Query,
+	sorts []plex.Sort,
+	total int,
+	loaded bool,
+) gogui.View {
 	chips := make([]gogui.View, 0, 6)
 	if current, down, ok := currentSort(q, sorts); ok {
 		options := make([]gogui.SelectOption, 0, len(sorts))
@@ -208,8 +217,10 @@ func (a *App) listBar(section string, q plex.Query, sorts []plex.Sort, total int
 		}
 		reach := style.Reach()
 		chips = append(chips, gogui.Select(gogui.SelectCfg{
-			ID:        "plex-sort-" + section,
-			A11YCfg:   gogui.A11YCfg{A11YLabel: say.F("plex.sort", map[string]any{"Name": current.Title})},
+			ID: "plex-sort-" + section,
+			A11YCfg: gogui.A11YCfg{
+				A11YLabel: say.F("plex.sort", map[string]any{"Name": current.Title}),
+			},
 			TextStyle: gogui.CurrentTheme().Cfg.TextStyleDef,
 			Options:   options,
 			Selected:  []string{current.Key},
@@ -442,8 +453,14 @@ func blank(side float32) gogui.View {
 		Width: side, Sizing: gogui.FixedFit, Padding: gogui.NoPadding, Spacing: gogui.SpacingSmall,
 		Content: []gogui.View{
 			gogui.Column(gogui.ContainerCfg{
-				Width: side, Height: side * tall, Sizing: gogui.FixedFixed, Padding: gogui.NoPadding,
-				Radius: gogui.RadiusPx(side * tall * 0.05), Color: gogui.CurrentTheme().Cfg.ColorPanel,
+				Width:   side,
+				Height:  side * tall,
+				Sizing:  gogui.FixedFixed,
+				Padding: gogui.NoPadding,
+				Radius: gogui.RadiusPx(
+					side * tall * 0.05,
+				),
+				Color: gogui.CurrentTheme().Cfg.ColorPanel,
 			}),
 			gogui.Label(" ", gogui.CurrentTheme().Cfg.TextStyleDef),
 			gogui.Label(" ", quiet),

@@ -118,8 +118,15 @@ func (a *App) rail(w *gogui.Window, wide bool) gogui.View {
 func divider(across bool) gogui.View {
 	t := gogui.CurrentTheme().Cfg
 	line := gogui.ContainerCfg{
-		Width: 1, Height: 1, Padding: gogui.NoPadding,
-		Color: gogui.RGBA(t.TextStyleDef.Color.R, t.TextStyleDef.Color.G, t.TextStyleDef.Color.B, 0x30),
+		Width:   1,
+		Height:  1,
+		Padding: gogui.NoPadding,
+		Color: gogui.RGBA(
+			t.TextStyleDef.Color.R,
+			t.TextStyleDef.Color.G,
+			t.TextStyleDef.Color.B,
+			0x30,
+		),
 	}
 	if across {
 		line.Sizing = gogui.FillFixed

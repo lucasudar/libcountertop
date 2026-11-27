@@ -227,7 +227,13 @@ func (a *App) trouble(text string) gogui.View {
 		gogui.Row(gogui.ContainerCfg{
 			Sizing: gogui.FitFit, Padding: gogui.NoPadding, Spacing: gogui.SpacingMedium,
 			Content: []gogui.View{
-				a.chip("plex-retry", "mdi:refresh", say.T("common.actions.retry"), true, a.o.Plex.Open),
+				a.chip(
+					"plex-retry",
+					"mdi:refresh",
+					say.T("common.actions.retry"),
+					true,
+					a.o.Plex.Open,
+				),
 				a.chip("plex-signout", "mdi:logout", say.T("plex.signout"), false,
 					a.o.Plex.SignOut),
 			},

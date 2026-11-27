@@ -1,10 +1,10 @@
 package schema
 
 type Plex struct {
-	Client       string `json:"client,omitempty"`
-	Token        string `json:"token,omitempty"`
-	Profile      string `json:"profile,omitempty"`
-	ProfileToken string `json:"profile_token,omitempty"`
+	Client       string     `json:"client,omitempty"`
+	Token        string     `json:"token,omitempty"`
+	Profile      string     `json:"profile,omitempty"`
+	ProfileToken string     `json:"profile_token,omitempty"`
 	Server       string     `json:"server,omitempty"`
 	LastServer   PlexServer `json:"last_server,omitzero"`
 }
